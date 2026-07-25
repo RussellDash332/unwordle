@@ -19,11 +19,15 @@
     <!-- Main Container -->
     <main class="w-full max-w-4xl bg-slate-800/85 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-slate-700/50 flex flex-col gap-6 animate-fade">
 
-        <!-- Controls: Guess Count Selector -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/40">
-            <span class="text-sm font-medium text-slate-300">Active Guesses:</span>
-            <div id="guess-buttons" class="flex gap-2">
-                <!-- Generated via JS -->
+        <!-- Controls: Row Controls & Reset -->
+        <div class="flex items-center justify-between gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/40">
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-slate-300">Guesses:</span>
+                <div class="flex items-center gap-1.5">
+                    <button id="remove-row-btn" class="w-7 h-7 flex items-center justify-center bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-bold text-base rounded-lg border border-slate-700 transition shadow" title="Remove Row">−</button>
+                    <span id="row-count-display" class="text-sm font-extrabold text-emerald-400 w-6 text-center">5</span>
+                    <button id="add-row-btn" class="w-7 h-7 flex items-center justify-center bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-bold text-base rounded-lg border border-slate-700 transition shadow" title="Add Row">+</button>
+                </div>
             </div>
             <button id="reset-btn" class="px-4 py-1.5 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold rounded-lg transition shadow">
                 Reset All
@@ -36,7 +40,7 @@
             <div class="flex flex-col gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/40">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Enter Guess Letters</h3>
                 <div id="guesses-board" class="flex flex-col gap-2.5 min-h-[180px] justify-center items-center">
-                    <!-- Dynamic state or default warning message -->
+                    <!-- Dynamic state -->
                 </div>
             </div>
 
@@ -44,7 +48,7 @@
             <div class="flex flex-col gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/40">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">2. Set Verdicts</h3>
                 <div id="verdicts-board" class="flex flex-col gap-2.5 min-h-[180px] justify-center items-center">
-                    <!-- Dynamic state or default warning message -->
+                    <!-- Dynamic state -->
                 </div>
             </div>
         </div>

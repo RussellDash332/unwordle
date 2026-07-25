@@ -12976,22 +12976,41 @@ const ALL_WORDS = WORDS_RAW
     .map(w => w.trim().toLowerCase())
     .filter(w => w.length === 5);
 
-let activeGuessesCount = null;
+let activeGuessesCount = 5;
 
 let guessesState = Array.from({ length: 5 }, () => Array(5).fill(''));
 let verdictsState = Array.from({ length: 5 }, () => Array(5).fill(0));
 
 function initApp() {
-    renderGuessButtons();
     buildBoards();
 
     document.getElementById('compute-btn').addEventListener('click', updateSolver);
 
+    document.getElementById('add-row-btn').addEventListener('click', () => {
+        if (activeGuessesCount >= 10) return;
+        activeGuessesCount++;
+        if (guessesState.length < activeGuessesCount) {
+            guessesState.push(Array(5).fill(''));
+            verdictsState.push(Array(5).fill(0));
+        }
+        document.getElementById('row-count-display').textContent = activeGuessesCount;
+        buildBoards();
+        resetWordDisplay();
+    });
+
+    document.getElementById('remove-row-btn').addEventListener('click', () => {
+        if (activeGuessesCount <= 1) return;
+        activeGuessesCount--;
+        document.getElementById('row-count-display').textContent = activeGuessesCount;
+        buildBoards();
+        resetWordDisplay();
+    });
+
     document.getElementById('reset-btn').addEventListener('click', () => {
-        activeGuessesCount = null;
+        activeGuessesCount = 5;
         guessesState = Array.from({ length: 5 }, () => Array(5).fill(''));
         verdictsState = Array.from({ length: 5 }, () => Array(5).fill(0));
-        renderGuessButtons();
+        document.getElementById('row-count-display').textContent = activeGuessesCount;
         buildBoards();
         resetWordDisplay();
     });
@@ -13003,46 +13022,11 @@ function resetWordDisplay() {
         '<span class="text-slate-500 italic">Click "Compute Words" to calculate possibilities.</span>';
 }
 
-function renderGuessButtons() {
-    const container = document.getElementById('guess-buttons');
-    container.innerHTML = '';
-    for (let i = 1; i <= 5; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        const isSelected = activeGuessesCount === i;
-        btn.className = `w-8 h-8 rounded-lg font-bold text-xs transition ${
-            isSelected
-                ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/30' 
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
-        }`;
-        btn.onclick = () => {
-            activeGuessesCount = i;
-            renderGuessButtons();
-            buildBoards();
-            resetWordDisplay();
-        };
-        container.appendChild(btn);
-    }
-}
-
 function buildBoards() {
     const guessesBoard = document.getElementById('guesses-board');
     const verdictsBoard = document.getElementById('verdicts-board');
     guessesBoard.innerHTML = '';
     verdictsBoard.innerHTML = '';
-
-    if (activeGuessesCount === null) {
-        const msgGuesses = document.createElement('span');
-        msgGuesses.className = 'text-sm text-slate-400 italic text-center py-8 font-medium';
-        msgGuesses.textContent = 'Select the number of guesses so far!';
-        guessesBoard.appendChild(msgGuesses);
-
-        const msgVerdicts = document.createElement('span');
-        msgVerdicts.className = 'text-sm text-slate-400 italic text-center py-8 font-medium';
-        msgVerdicts.textContent = 'Select the number of guesses so far!';
-        verdictsBoard.appendChild(msgVerdicts);
-        return;
-    }
 
     for (let r = 0; r < activeGuessesCount; r++) {
         const guessRowDiv = document.createElement('div');
@@ -13191,7 +13175,7 @@ function getVerdictColor(status) {
 }
 
 function filterWords() {
-    if (activeGuessesCount === null || ALL_WORDS.length === 0) {
+    if (ALL_WORDS.length === 0) {
         return ALL_WORDS;
     }
 
@@ -13236,12 +13220,37 @@ function filterWords() {
 }
 
 function updateSolver() {
+    const container = document.getElementById('word-list-container');
+    const countEl = document.getElementById('word-count');
+
+    let hasIncompleteRow = false;
+    let hasAnyFullWord = false;
+
+    for (let r = 0; r < activeGuessesCount; r++) {
+        const filledCount = guessesState[r].filter(c => c !== '').length;
+        if (filledCount > 0 && filledCount < 5) {
+            hasIncompleteRow = true;
+        }
+        if (filledCount === 5) {
+            hasAnyFullWord = true;
+        }
+    }
+
+    if (hasIncompleteRow) {
+        countEl.textContent = '-';
+        container.innerHTML = '<span class="text-amber-400 font-medium italic">Please complete all 5 letters for every active row (or clear incomplete words) before computing!</span>';
+        return;
+    }
+
+    if (!hasAnyFullWord) {
+        countEl.textContent = '-';
+        container.innerHTML = '<span class="text-amber-400 font-medium italic">Please enter at least one full 5-letter word and set its verdicts before computing!</span>';
+        return;
+    }
+
     const remainingWords = filterWords();
     
-    const countEl = document.getElementById('word-count');
     countEl.textContent = remainingWords.length;
-
-    const container = document.getElementById('word-list-container');
     container.innerHTML = '';
 
     if (remainingWords.length === 0) {
