@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unwordle</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='5' y='5' width='26' height='26' rx='4' fill='%23528d4d'/><rect x='37' y='5' width='26' height='26' rx='4' fill='%233a3a3a'/><rect x='69' y='5' width='26' height='26' rx='4' fill='%23b59f3a'/><rect x='5' y='37' width='26' height='26' rx='4' fill='%23b59f3a'/><rect x='37' y='37' width='26' height='26' rx='4' fill='%23528d4d'/><rect x='69' y='37' width='26' height='26' rx='4' fill='%233a3a3a'/><rect x='5' y='69' width='26' height='26' rx='4' fill='%233a3a3a'/><rect x='37' y='69' width='26' height='26' rx='4' fill='%23528d4d'/><rect x='69' y='69' width='26' height='26' rx='4' fill='%23b59f3a'/><circle cx='50' cy='50' r='38' fill='none' stroke='%23ef4444' stroke-width='12'/><line x1='23' y1='23' x2='77' y2='77' stroke='%23ef4444' stroke-width='12'/></svg>">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-between py-8 px-4 font-sans">
+
+    <!-- Header -->
+    <header class="text-center mb-6 animate-fade">
+        <h1 class="text-4xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">UNWORDLE</h1>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-4xl bg-slate-800/85 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-slate-700/50 flex flex-col gap-6 animate-fade">
+
+        <!-- Controls: Guess Count Selector -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/40">
+            <span class="text-sm font-medium text-slate-300">Active Guesses:</span>
+            <div id="guess-buttons" class="flex gap-2">
+                <!-- Generated via JS -->
+            </div>
+            <button id="reset-btn" class="px-4 py-1.5 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold rounded-lg transition shadow">
+                Reset All
+            </button>
+        </div>
+
+        <!-- Dual Tables Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Table 1: Guess Letters -->
+            <div class="flex flex-col gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/40">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Enter Guess Letters</h3>
+                <div id="guesses-board" class="flex flex-col gap-2.5 min-h-[180px] justify-center items-center">
+                    <!-- Dynamic state or default warning message -->
+                </div>
+            </div>
+
+            <!-- Table 2: Verdicts / Feedback -->
+            <div class="flex flex-col gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/40">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">2. Set Verdicts</h3>
+                <div id="verdicts-board" class="flex flex-col gap-2.5 min-h-[180px] justify-center items-center">
+                    <!-- Dynamic state or default warning message -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats & Action Bar -->
+        <div class="flex items-center justify-between px-2 pt-2 border-t border-slate-700/50">
+            <div class="text-sm text-slate-300">
+                Valid Words Left: <span id="word-count" class="font-bold text-emerald-400 text-lg">-</span>
+            </div>
+            <button id="compute-btn" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm rounded-xl transition shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center gap-2">
+                ⚡ Compute Words
+            </button>
+        </div>
+
+        <!-- Remaining Words Panel -->
+        <div class="flex flex-col gap-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Possible Matching Words</h3>
+            <div id="word-list-container" class="bg-slate-900/80 border border-slate-700/50 rounded-xl p-4 h-40 overflow-y-auto flex flex-wrap gap-2 content-start text-sm">
+                <span class="text-slate-500 italic">Click "Compute Words" to calculate possibilities.</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-xs text-slate-500 mt-8 text-center">
+        &copy; Russell Saerang 2026
+    </footer>
+
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>
